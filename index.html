@@ -1,0 +1,509 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>POP: Suporte Takeat - Five Points Burguer</title>
+    <style>
+        /* Estilo Base - Modo Claro de Alto Contraste */
+        body {
+            background-color: #f5f5f5;
+            color: #222222;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 20px;
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 850px;
+            margin: auto;
+            padding-bottom: 60px; /* Espaço para o rodapé fixo */
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 25px;
+            border-bottom: 3px solid #d32f2f; /* Vermelho operacional */
+            padding-bottom: 15px;
+        }
+
+        .header h1 {
+            color: #111111;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin: 0;
+            font-size: 28px;
+            font-weight: 800;
+        }
+
+        .header p {
+            color: #555555;
+            font-size: 16px;
+            margin-top: 5px;
+            font-weight: bold;
+        }
+
+        /* Campo de Busca Principal */
+        .search-box {
+            width: 100%;
+            padding: 15px;
+            font-size: 18px;
+            box-sizing: border-box;
+            border: 3px solid #222222;
+            border-radius: 6px;
+            margin-bottom: 25px;
+            background-color: #ffffff;
+            font-weight: bold;
+        }
+
+        .search-box:focus {
+            border-color: #d32f2f;
+            outline: none;
+        }
+
+        /* Regra de Ouro */
+        .golden-rule {
+            background-color: #fff9db;
+            border: 3px solid #f59f00;
+            padding: 18px;
+            border-radius: 6px;
+            margin-bottom: 30px;
+        }
+
+        .golden-rule h3 {
+            margin-top: 0;
+            color: #e67e22;
+            font-size: 20px;
+            text-transform: uppercase;
+        }
+
+        /* Categorias (Grandes Títulos) */
+        .category-section {
+            margin-top: 35px;
+        }
+
+        .category-title {
+            color: #111111;
+            font-size: 22px;
+            font-weight: 800;
+            text-transform: uppercase;
+            margin-bottom: 15px;
+            background-color: #e0e0e0;
+            padding: 8px 12px;
+            border-radius: 4px;
+        }
+
+        /* Bloco de Ocorrência com Borda Vermelha */
+        .problem-card {
+            background-color: #ffffff;
+            border: 2px solid #d32f2f; /* Borda Vermelha delimitadora */
+            border-radius: 6px;
+            margin-bottom: 15px;
+            overflow: hidden;
+        }
+
+        /* Botão / Título do Problema */
+        .accordion {
+            background-color: #ffffff;
+            color: #d32f2f;
+            cursor: pointer;
+            padding: 18px;
+            width: 100%;
+            border: none;
+            text-align: left;
+            outline: none;
+            font-size: 18px;
+            font-weight: 800;
+            transition: 0.2s;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .active, .accordion:hover {
+            background-color: #ffebee; /* Fundo levemente avermelhado no hover */
+        }
+
+        .accordion:after {
+            content: '\002B'; /* Sinal de + */
+            font-size: 24px;
+            font-weight: bold;
+        }
+
+        .active:after {
+            content: "\2212"; /* Sinal de - */
+        }
+
+        /* Painel de Conteúdo Interno */
+        .panel {
+            padding: 0 18px;
+            background-color: #fafafa;
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.2s ease-out;
+            border-top: 1px dashed #d32f2f;
+        }
+
+        .panel-content {
+            padding: 20px 0;
+            font-size: 16px;
+        }
+
+        /* Detalhes Didáticos */
+        .section-label {
+            display: block;
+            font-weight: 800;
+            text-transform: uppercase;
+            font-size: 14px;
+            margin-bottom: 5px;
+        }
+
+        .causa-box {
+            color: #c0392b;
+            margin-bottom: 15px;
+        }
+
+        .solucao-box {
+            color: #27ae60;
+        }
+
+        /* Passos Operacionais */
+        .step-list {
+            margin: 10px 0 0 0;
+            padding-left: 20px;
+        }
+
+        .step-list li {
+            margin-bottom: 10px;
+            color: #333333;
+        }
+
+        .sub-step-list {
+            margin-top: 5px;
+            padding-left: 20px;
+            list-style-type: circle;
+        }
+
+        .sub-step-list li {
+            margin-bottom: 5px;
+            color: #555555;
+        }
+
+        /* Destaques de Teclado e Caminhos */
+        .key-badge {
+            background-color: #333333;
+            color: #ffffff;
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-family: monospace;
+            font-weight: bold;
+        }
+
+        .path-badge {
+            background-color: #e8f5e9;
+            color: #1b5e20;
+            padding: 2px 6px;
+            border: 1px solid #c8e6c9;
+            border-radius: 4px;
+            font-weight: bold;
+        }
+
+        /* Vídeo Responsivo */
+        .video-container {
+            margin-top: 20px;
+            text-align: center;
+            background-color: #f0f0f0;
+            padding: 15px;
+            border-radius: 4px;
+            border: 1px solid #ddd;
+        }
+
+        video {
+            width: 100%;
+            max-width: 550px;
+            border-radius: 4px;
+            border: 2px solid #222;
+        }
+
+        /* Rodapé de Versão */
+        .footer {
+            text-align: center;
+            margin-top: 40px;
+            padding: 15px;
+            border-top: 1px solid #ddd;
+            color: #777777;
+            font-size: 13px;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <div class="header">
+        <h1>POP - SUPORTE TÉCNICO TAKEAT</h1>
+        <p>Guia Rápido de Resolução para Operadores de Caixa</p>
+    </div>
+
+    <input type="text" id="searchInput" class="search-box" onkeyup="filterProblems()" placeholder="🔍 Digite o problema aqui para buscar (ex: impressora, whatsapp, internet)...">
+
+    <div class="golden-rule">
+        <h3>🚨 REGRA DE OURO DO CAIXA</h3>
+        <p>Se o sistema travar totalmente a operação e você precisar chamar o suporte avançado da Takeat, faça isso imediatamente:</p>
+        <ol class="step-list">
+            <li>Abra o aplicativo <strong>AnyDesk</strong> no computador do caixa.</li>
+            <li>Copie o número de <strong>ID de acesso remoto</strong> gerado na tela.</li>
+            <li>Envie o ID na primeira mensagem para o atendente do chat. Isso evita que a cozinha fique parada esperando o suporte conectar!</li>
+        </ol>
+    </div>
+
+    <div class="category-section">
+        <h2 class="category-title">🖨️ 1. Módulo de Impressão e Comandas</h2>
+
+        <div class="problem-card">
+            <button class="accordion">A: Pedidos do iFood demoram para imprimir (Atraso de ~1 minuto)</button>
+            <div class="panel">
+                <div class="panel-content">
+                    <div class="causa-box">
+                        <span class="section-label">⚠️ CAUSA PROVÁVEL:</span>
+                        Acúmulo de arquivos temporários (cache) no navegador Chrome ou travamento na página ativa da operação.
+                    </div>
+                    <div class="solucao-box">
+                        <span class="section-label">✅ PASSO A PASSO PARA RESOLVER:</span>
+                        <ol class="step-list">
+                            <li>Vá até o computador que gerencia e recebe os pedidos.</li>
+                            <li>No teclado, segure firme a tecla <span class="key-badge">Ctrl</span> e aperte o botão <span class="key-badge">F5</span>.</li>
+                            <li>Isso vai forçar o navegador a recarregar o sistema do zero de forma limpa. Aguarde a página reabrir.</li>
+                        </ol>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="problem-card">
+            <button class="accordion">B: Pedidos do Delivery saindo duplicados (2 vias idênticas na mesma impressora)</button>
+            <div class="panel">
+                <div class="panel-content">
+                    <div class="causa-box">
+                        <span class="section-label">⚠️ CAUSA PROVÁVEL:</span>
+                        Duas abas do sistema abertas no navegador ou o aplicativo "Takeat Printer" foi aberto duas vezes por engano no Windows.
+                    </div>
+                    <div class="solucao-box">
+                        <span class="section-label">✅ PASSO A PASSO PARA RESOLVER:</span>
+                        <ol class="step-list">
+                            <li>Olhe as abas lá em cima no seu navegador. Certifique-se de que não existem duas telas de pedidos abertas. Se houver, feche uma.</li>
+                            <li>Verifique na barra de tarefas do Windows (perto do relógio) se o aplicativo de impressão não está rodando em dobro.</li>
+                            <li>Se tudo parecer normal e o erro continuar, abra o AnyDesk e chame o suporte técnico para reconfigurar os drivers.</li>
+                        </ol>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="problem-card">
+            <button class="accordion">C: Nenhuma impressora funciona (Mesmo com Token ativo)</button>
+            <div class="panel">
+                <div class="panel-content">
+                    <div class="causa-box">
+                        <span class="section-label">⚠️ CAUSA PROVÁVEL:</span>
+                        A função interna que manda o comando de impressão automática para a máquina foi desmarcada no painel.
+                    </div>
+                    <div class="solucao-box">
+                        <span class="section-label">✅ PASSO A PASSO PARA RESOLVER:</span>
+                        <ol class="step-list">
+                            <li><strong>Passo 1: Testar a Impressora direto no Windows</strong>
+                                <ul class="sub-step-list">
+                                    <li>No teclado do caixa, aperte a tecla com o desenho do <span class="key-badge">Windows ⊞</span> (ou clique no menu iniciar).</li>
+                                    <li>Digite <strong>Painel de Controle</strong> e aperte <span class="key-badge">Enter</span>.</li>
+                                    <li>Clique na opção <strong>Exibir impressoras e dispositivos</strong> (fica logo abaixo de Hardware e Sons).</li>
+                                    <li>Encontre o ícone da sua impressora térmica, clique nela com o <strong>botão direito do mouse</strong> e escolha <strong>Propriedades da Impressora</strong>.</li>
+                                    <li>Na aba Geral, clique no botão lá embaixo: <strong>Imprimir Página de Teste</strong>.</li>
+                                    <li><em>Se a folha sair:</em> O cabo e a impressora estão perfeitos. O erro é só configuração (siga o Passo 2 abaixo).</li>
+                                    <li><em>Se NÃO sair papel:</em> A impressora está desligada, sem papel ou o cabo USB desconectou! Verifique os fios.</li>
+                                </ul>
+                            </li>
+                            <li style="margin-top: 15px;"><strong>Passo 2: Ativação no Painel Takeat</strong>
+                                <ul class="sub-step-list">
+                                    <li>Acesse o painel administrativo da Takeat no navegador.</li>
+                                    <li>Vá nas configurações de impressão da loja.</li>
+                                    <li>Localize a caixinha escrita <span class="path-badge">"Impressão automática de comanda"</span>.</li>
+                                    <li>Certifique-se de deixar essa opção <strong>marcada / ativa</strong>.</li>
+                                </ul>
+                            </li>
+                        </ol>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="problem-card">
+            <button class="accordion">D: Tela fica branca e trava ao tentar lançar mais de um item no mesmo pedido</button>
+            <div class="panel">
+                <div class="panel-content">
+                    <div class="causa-box">
+                        <span class="section-label">⚠️ CAUSA PROVÁVEL:</span>
+                        Instabilidade temporária nos códigos internos (scripts) de carregamento da tela de vendas. Exige limpeza manual.
+                    </div>
+                    <div class="solucao-box">
+                        <span class="section-label">✅ PASSO A PASSO PARA RESOLVER:</span>
+                        <ol class="step-list">
+                            <li>Siga as instruções exatas mostradas no vídeo passo a passo abaixo para limpar os cookies e permissões específicas deste site.</li>
+                            <li>Caso o erro de tela branca continue ocorrendo mesmo após o procedimento do vídeo, abra o AnyDesk e acione o suporte técnico.</li>
+                        </ol>
+                        <div class="video-container">
+                            <span class="section-label" style="color:#222;">📺 VÍDEO EXPLICATIVO (LIMPEZA DE CACHE DO SITE):</span>
+                            <video controls>
+                                <source src="limpeza_cache.mp4" type="video/mp4">
+                                Seu navegador não suporta a tag de vídeo.
+                            </video>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="category-section">
+        <h2 class="category-title">💰 2. Cashback, Fidelidade e Clientes</h2>
+
+        <div class="problem-card">
+            <button class="accordion">Cliente informa o celular no Delivery, mas diz que o desconto de Cashback não aparece</button>
+            <div class="panel">
+                <div class="panel-content">
+                    <div class="causa-box">
+                        <span class="section-label">⚠️ CAUSA PROVÁVEL:</span>
+                        Os pontos estão guardados de forma segura no número dele, mas o cliente ainda não terminou o cadastro oficial no clube.
+                    </div>
+                    <div class="solucao-box">
+                        <span class="section-label">✅ PASSO A PASSO PARA RESPONDER E RESOLVER:</span>
+                        <ol class="step-list">
+                            <li>Explique educadamente ao cliente: <em>"Seus pontos já estão salvos e guardados com segurança no seu número de telefone!"</em>.</li>
+                            <li>Oriente o cliente a fazer o cadastro completo acessando o link oficial da nossa loja: <span class="path-badge">https://app.takeat.club/fivepointsburguer</span></li>
+                            <li>Informe que, assim que ele finalizar esse cadastro, o saldo total de desconto estará liberado para uso automático já no próximo pedido.</li>
+                        </ol>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="category-section">
+        <h2 class="category-title">🧾 3. Módulo de Emissão Fiscal (NF-e / NFC-e)</h2>
+
+        <div class="problem-card">
+            <button class="accordion">Notas fiscais não geram automaticamente ou exibem "Erro SEFAZ"</button>
+            <div class="panel">
+                <div class="panel-content">
+                    <div class="causa-box">
+                        <span class="section-label">⚠️ CAUSA PROVÁVEL:</span>
+                        O servidor da Receita Estadual (SEFAZ) está fora do ar ou oscilando, interrompendo o envio automático da nota.
+                    </div>
+                    <div class="solucao-box">
+                        <span class="section-label">✅ PASSO A PASSO PARA CONVERTER E EMITIR:</span>
+                        <ol class="step-list">
+                            <li>Não pare a operação. Enquanto o suporte restabelece a fila automática, você deve fazer a emissão manual do pedido preso.</li>
+                            <li>No painel da Takeat, vá até o menu lateral e acesse <span class="path-badge">Notas Emitidas</span>.</li>
+                            <li>Localize o pedido que ficou sem a nota, clique nele e selecione a opção para <strong>Emitir Documento Individual</strong>.</li>
+                        </ol>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="category-section">
+        <h2 class="category-title">💬 4. Integrações e Logística</h2>
+
+        <div class="problem-card">
+            <button class="accordion">WhatsApp desconecta toda hora ou não manda mensagens de status ao cliente</button>
+            <div class="panel">
+                <div class="panel-content">
+                    <div class="causa-box">
+                        <span class="section-label">⚠️ CAUSA PROVÁVEL:</span>
+                        O token de conexão caiu, o celular da loja está sem bateria/internet estável ou o parâmetro de avisos automáticos foi desligado.
+                    </div>
+                    <div class="solucao-box">
+                        <span class="section-label">✅ PASSO A PASSO PARA RECONECTAR:</span>
+                        <ol class="step-list">
+                            <li>No sistema, siga o caminho: <span class="path-badge">Menu > Delivery > Configurações</span>.</li>
+                            <li>Procure a opção <span class="path-badge">"Aviso ao cliente (mensagem via WhatsApp)"</span> e certifique-se de que ela está ligada.</li>
+                            <li>Se aparecer como "Desconectado", pegue o celular físico da loja, vá em aparelhos conectados no WhatsApp, limpe as conexões antigas e **leia o QR Code da tela novamente**.</li>
+                            <li><strong>Atenção:</strong> Certifique-se de que o celular da loja permaneça ligado na tomada e conectado ao Wi-Fi principal.</li>
+                        </ol>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="footer">
+        Versão do Aplicativo: v1.1.0 | Última Alteração: 26 de Maio de 2026
+    </div>
+
+</div>
+
+<script>
+    // Lógica das Sanfonas (Accordions)
+    var acc = document.getElementsByClassName("accordion");
+    var i;
+
+    for (i = 0; i < acc.length; i++) {
+        acc[i].addEventListener("click", function() {
+            this.classList.toggle("active");
+            var panel = this.nextElementSibling;
+            if (panel.style.maxHeight) {
+                panel.style.maxHeight = null;
+            } else {
+                panel.style.maxHeight = panel.scrollHeight + "px";
+            } 
+        });
+    }
+
+    // Lógica do Campo de Busca Inteligente
+    function filterProblems() {
+        var input = document.getElementById("searchInput");
+        var filter = input.value.toLowerCase();
+        var cards = document.getElementsByClassName("problem-card");
+        var sections = document.getElementsByClassName("category-section");
+
+        for (var i = 0; i < cards.length; i++) {
+            var buttonText = cards[i].getElementsByClassName("accordion")[0].innerText.toLowerCase();
+            var contentText = cards[i].getElementsByClassName("panel-content")[0].innerText.toLowerCase();
+            
+            if (buttonText.includes(filter) || contentText.includes(filter)) {
+                cards[i].style.display = "";
+            } else {
+                cards[i].style.display = "none";
+            }
+        }
+
+        for (var j = 0; j < sections.length; j++) {
+            var allCardsInSection = sections[j].getElementsByClassName("problem-card");
+            
+            if (filter === "") {
+                sections[j].style.display = "";
+                for (var k = 0; k < allCardsInSection.length; k++) {
+                    allCardsInSection[k].style.display = "";
+                }
+                continue;
+            }
+
+            var count = 0;
+            for(var m=0; m<allCardsInSection.length; m++) {
+                if(allCardsInSection[m].style.display !== "none") {
+                    count++;
+                }
+            }
+
+            if (count > 0) {
+                sections[j].style.display = "";
+            } else {
+                sections[j].style.display = "none";
+            }
+        }
+    }
+</script>
+
+</body>
+</html>
